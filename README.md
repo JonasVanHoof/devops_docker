@@ -5,7 +5,7 @@
 * [Docker docs](https://www.docker.com/get-started)
 * [Docker training](https://training.play-with-docker.com/node-sql-server-docker/)
 
-## Hello world
+## Hello world with script
 As container image I use the [alpine](https://docs.docker.com/samples/library/alpine/) image.
 ```docker
 FROM alpine
@@ -23,6 +23,38 @@ Run the script with shell
 ```docker
 CMD ["sh", "./script.sh"]
 ```
+## Hello world with webserver
+As container image I use the [php:7.0-apache](https://hub.docker.com/_/php) image.
+```docker
+FROM alpine
+```
+Make a script that runs "hello world".
+```php
+<?php
+echo "hello, world";
+```
+Copy the script from local directory to the docker container.
+```docker
+COPY ./index.php /var/www/html
+```
+Set the outcoming port for the server
+```docker
+EXPOSE 80
+```
+Build the hellWorld image
+```bash
+docker build ./helloWorld
+```
+Run the hellWorld image with the -p for selecting the internal & external port.
+```bash
+docker run -p 80:80 container_id
+```
+If you want that your webserver will be update if you change something in your index.php file you can mount that file to the containers /var/www/html.
+```bash
+docker run -p 80:80 - v /home/jonas/Nextcloud/DevOps/Jonas/devops_docker/helloWorld/:/var/www/html container_id
+```
+Open your your web-browser and go to "localhost".
+
 ## Sql-server
 Use the mysql image.
 ```docker
